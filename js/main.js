@@ -13,7 +13,7 @@ $(document).ready( function(){
   var cx = 100;
   var cy = 100;
   var r = 70;
-  var pathstring = "100,100 100,40";
+  var pathstring = "100,100 ";
   var x,y;
   for( var i = -90; i < 270; i+= 45){
     x = cx + r * Math.cos( toRad(i));
