@@ -1,3 +1,5 @@
+// change the browser tab text
+// document.title = 'New title';
 
 $(document).ready( function(){
   /*
@@ -18,8 +20,9 @@ $(document).ready( function(){
     y = cy + r* Math.sin( toRad(i));
     pathstring += " "+x+","+y;
   }
-  x = cx + r * Math.cos( toRad( 200));
-  y = cy + r* Math.sin( toRad( 200));
+  x = cx + r * Math.cos( toRad( 240));
+  y = cy + r* Math.sin( toRad( 240));
+  pathstring += " "+x+","+y+" 100,100";
   $('#pathClip').attr( "points", pathstring);
   $('#pathGhost').attr( "points", pathstring);
   $('.btn').click( function( e){
