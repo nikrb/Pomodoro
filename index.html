@@ -23,10 +23,20 @@
               <polyline points="100,100 100,50"/>
             </clipPath>
             <mask id="minutes_hole">
-              <circle id="minutes_face" cx="100" cy="100" r="50" fill="white" />
-              <circle id="minutes_face" cx="100" cy="100" r="30" fill="black" />
+              <circle cx="100" cy="100" r="50" fill="white" />
+              <circle cx="100" cy="100" r="30" fill="black" />
+            </mask>
+            <clipPath id="interval_clip_path">
+              <polyline points="100,100 100,50"/>
+            </clipPath>
+            <mask id="interval_hole">
+              <circle cx="100" cy="100" r="70" fill="white" />
+              <circle cx="100" cy="100" r="50" fill="black" />
             </mask>
           </defs>
+
+          <circle id="interval_face" cx="100" cy="100" r="70" fill="yellow"
+                  mask="url(#interval_hole)" clip-path="url(#interval_clip_path)" />
 
           <circle id="minutes_face" cx="100" cy="100" r="50" fill="red" 
                   mask="url(#minutes_hole)" clip-path="url(#minutes_clip_path)"/>

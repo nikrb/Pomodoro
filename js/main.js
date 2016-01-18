@@ -30,13 +30,17 @@ $(document).ready( function(){
         $('#'+id+">polyline").attr( "points", pathstring);
         // $('#pathGhost').attr( "points", pathstring);
     }
-    var sf = $( '#seconds_face');
-    drawFace( 'seconds_clip_path', parseFloat( sf.attr( "cx")), parseFloat( sf.attr( "cy")),
-                                    parseFloat( sf.attr( "r"))+20, 240);
+    // ha! can't have interval face (if), so use period face (pf)
+    var pf = $('#interval_face');
+    drawFace( 'interval_clip_path', parseFloat( pf.attr( "cx")), parseFloat( pf.attr( 'cy')),
+                                    parseFloat( pf.attr( 'r'))+40, 200);
     var mf = $('#minutes_face');
     drawFace( 'minutes_clip_path', parseFloat( mf.attr( 'cx')), parseFloat( mf.attr( 'cy')),
-                                    parseFloat( sf.attr( 'r'))+30, 220);
-    // drawFace( 'minutes_clip_path', 90, 140);
+                                    parseFloat( mf.attr( 'r'))+30, 220);
+    var sf = $( '#seconds_face');
+    drawFace( 'seconds_clip_path', parseFloat( sf.attr( "cx")), parseFloat( sf.attr( "cy")),
+                                    parseFloat( sf.attr( "r"))+20, 180);
+
     $('.btn').click( function( e){
     });
 });
