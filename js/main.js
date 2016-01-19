@@ -127,13 +127,9 @@ $(document).ready( function(){
         var mfr = parseInt( mf.attr('r'))-10;
         var cx =  parseInt( mf.attr( 'cx'));
         var cy =  parseInt( mf.attr( 'cy'));
-        console.log( "cx[%d] cy[%d]", cx, cy);
-        if( total > 12){
-            offset = 2;
-        }
         for( var i=1; i<=total; i++){
             // we go from -90 to +270
-            var ang = i*angle_delta -90;
+            var ang = i*angle_delta -90 - angle_delta/2;
             // FIXME gotta love tweaks (+-3), need a read through svg text
             var tx = cx + mfr * Math.cos( toRad(ang)) - 3;
             var ty = cy + mfr * Math.sin( toRad(ang)) + 3;
