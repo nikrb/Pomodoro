@@ -89,6 +89,20 @@ $(document).ready( function(){
                                             'font-size':'6'}, i);
         }
     }
+
+    function displayGradationText(){
+        // display the gradation text
+        $('#pomodoro_face text').remove();
+        // main centred text show minutes left for current interval
+        var txt = makeSVGText( 'pomodoro_face', 'text', { id:'minutes_text', x:'100', y:'100', fill:'darkorange',
+                                            'font-size':'25', 'font-weight':'bold'}, "24");
+        formatSVGText( 'minutes_text', txt);
+
+        // the the doughnut grads for minutes and interval
+        drawGradations( 25, mf, 'minsgrad');
+        drawGradations( 4, pf, 'intervalgrad');
+    }
+
     // ha! interval face (if) is a keyword, so use period face (pf)
     var pf = $('#interval_face');
     drawFace( 'interval_clip_path', parseFloat( pf.attr( "cx")), parseFloat( pf.attr( 'cy')),
@@ -100,13 +114,7 @@ $(document).ready( function(){
     drawFace( 'seconds_clip_path', parseFloat( sf.attr( "cx")), parseFloat( sf.attr( "cy")),
                                     parseFloat( sf.attr( "r"))+20, 180);
 
-    // display the gradation text for the minute and interval doughnuts
-    $('#pomodoro_face text').remove();
-    // main centred text show minutes left for current interval
-    var txt = makeSVGText( 'pomodoro_face', 'text', { id:'minutes_text', x:'100', y:'100', fill:'darkorange',
-                                        'font-size':'25', 'font-weight':'bold'}, "24");
-    formatSVGText( 'minutes_text', txt);
+    displayGradationText();
 
-    drawGradations( 25, mf, 'minsgrad');
-    drawGradations( 4, pf, 'intervalgrad');
+    
 });
