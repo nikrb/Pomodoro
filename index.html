@@ -14,7 +14,7 @@
     </div>
     <div class='row text-center'>
       <div id='pomodoro-box' class=' col-xs-4'>
-        <svg id="pomodoro_face" viewBox="00 0 200 200" width="200" height="200">
+        <svg id="pomodoro_face" viewBox="00 0 200 200" width="400" height="400">
           <defs>
             <clipPath id="seconds_clip_path">
               <polyline points="100,100 100,50"/>
@@ -37,15 +37,17 @@
 
           <circle id="interval_face" cx="100" cy="100" r="70" fill="yellow"
                   mask="url(#interval_hole)" clip-path="url(#interval_clip_path)" />
+          <circle cx='100' cy='100' r='70' stroke='black' fill='none'/>
 
           <circle id="minutes_face" cx="100" cy="100" r="50" fill="red" 
                   mask="url(#minutes_hole)" clip-path="url(#minutes_clip_path)"/>
+          <circle cx='100' cy='100' r='50' stroke='black' fill='none'/>
 
           <circle id="seconds_face" cx="100" cy="100" r="30" fill="blue" clip-path="url(#seconds_clip_path)" />
+          <circle cx='100' cy='100' r='30' stroke='black' fill='none'/>
           <!-- check outline >
-          <polyline id='pathGhost' points="100,100 100,50" stroke='black'
+          <polyline id='pathGhost' points="100,100 100,50"
                     style="fill:none;stroke:red;stroke-width:3"/-->
-          <text x='30' y='100' fill='purple' font-size='12' >20</text>
 
         </svg>
       </div>

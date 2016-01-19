@@ -48,9 +48,7 @@ $(document).ready( function(){
         $('#'+id+">polyline").attr( "points", pathstring);
         // $('#pathGhost').attr( "points", pathstring);
     }
-    function drawGradations( ){
 
-    }
     // ha! interval face (if) is a keyword, so use period face (pf)
     var pf = $('#interval_face');
     drawFace( 'interval_clip_path', parseFloat( pf.attr( "cx")), parseFloat( pf.attr( 'cy')),
@@ -66,6 +64,34 @@ $('#pomodoro_face text').remove();
 var txt = makeSVGText( 'pomodoro_face', 'text', { id:'minutes_text', x:'100', y:'100', fill:'darkorange',
                                     'font-size':'25', 'font-weight':'bold'}, "24");
 formatSVGText( 'minutes_text', txt);
+
+drawGradations( 25, mf, 'minsgrad');
+drawGradations( 4, pf, 'intervalgrad');
+
+/**
+display svg text for 
+params:
+total:int       number of gradations, e.g. (secs:60, mins:25, intervals:4)
+mf:$.element    one of the doughnut faces, [interval_face, minutes_face, seconds_face]
+id_base:string  base string for gradations, e.g. mins_grad_text for minutes
+**/
+function drawGradations( total, mf, id_base){
+    var angle_delta = 360/total;
+    var mfr = parseInt( mf.attr('r'))-10;
+    var cx =  parseInt( mf.attr( 'cx'));
+    var cy =  parseInt( mf.attr( 'cy'));
+    console.log( "cx[%d] cy[%d]", cx, cy);
+    if( total > 12){
+        offset = 2;
+    }
+    for( var i=1; i<=total; i++){
+        var ang = i*angle_delta -90;
+        var tx = cx + mfr * Math.cos( toRad(ang)) - 3;
+        var ty = cy + mfr * Math.sin( toRad(ang)) + 3;
+        var txt = makeSVGText( 'pomodoro_face', 'text', { id:id_base+i, x:tx, y:ty, fill:'black',
+                                        'font-size':'6'}, i);
+    }
+}
 
     $('.btn').click( function( e){
     });
