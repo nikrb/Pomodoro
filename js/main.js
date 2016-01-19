@@ -177,6 +177,8 @@ $(document).ready( function(){
     var mf = $('#minutes_face');
     drawFace( 'minutes_clip_path', parseFloat( mf.attr( 'cx')), parseFloat( mf.attr( 'cy')),
                                     parseFloat( mf.attr( 'r'))+30, 220);
+    // switch colour mf.attr( 'fill', 'green');
+
     var sf = $( '#seconds_face');
     drawFace( 'seconds_clip_path', parseFloat( sf.attr( "cx")), parseFloat( sf.attr( "cy")),
                                     parseFloat( sf.attr( "r"))+20, 180);
