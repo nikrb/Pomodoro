@@ -1,16 +1,16 @@
-// change the browser tab text
-// document.title = 'New title';
-// set countdown timer time
-/**
+/*
+change the browser tab text
+document.title = 'New title';
+set countdown timer time
 
   x = R*cos(theta) and y = R*sin(theta)
  second timer:
   countdown from start (25) to 0
   angle goes from 270 to -90
   calc
-    360/25 = delta
-    
-*/
+    angle = count * 360/n -90
+ */
+
 $(document).ready( function(){
     $('input').blur( function(e){
         try{
@@ -89,6 +89,12 @@ $(document).ready( function(){
         console.log( "new text position:", tpos, tbox);
         $( '#'+id).attr( tpos);
     }
+    function drawSVGLine( append_to, tag, attrs) {
+        var el= document.createElementNS('http://www.w3.org/2000/svg', tag);
+        for (var k in attrs)
+            el.setAttribute(k, attrs[k]);
+        document.getElementById( append_to).appendChild( el);
+    }
     /**
         drawFace
         draw doughnut progress
@@ -124,23 +130,36 @@ $(document).ready( function(){
     **/
     function drawGradations( total, mf, id_base){
         var angle_delta = 360/total;
+        // the text radius needs to be in the middle of the doughnut
         var mfr = parseInt( mf.attr('r'))-10;
         var cx =  parseInt( mf.attr( 'cx'));
         var cy =  parseInt( mf.attr( 'cy'));
         for( var i=1; i<=total; i++){
-            // we go from -90 to +270
+            // we go from -90 to +270, - offset to move grad text off the grad line
             var ang = i*angle_delta -90 - angle_delta/2;
             // FIXME gotta love tweaks (+-3), need a read through svg text
             var tx = cx + mfr * Math.cos( toRad(ang)) - 3;
             var ty = cy + mfr * Math.sin( toRad(ang)) + 3;
-            var txt = makeSVGText( 'pomodoro_face', 'text', { id:id_base+i, x:tx, y:ty, fill:'black',
+            var txt = makeSVGText( 'pomodoro_face', 'text', { id:id_base+"_text"+i, x:tx, y:ty, fill:'black',
                                             'font-size':'6'}, i);
+        }
+        // the line radius needs to start at the outer edge
+        var mfrl = parseInt( mf.attr('r'));
+        for( i=0; i<total; i++){
+            var ang = i*angle_delta -90;
+            var x1 = cx + mfrl * Math.cos( toRad(ang));
+            var y1 = cy + mfrl * Math.sin( toRad(ang));
+            var x2 = cx + (mfrl-5) * Math.cos( toRad(ang));
+            var y2 = cy + (mfrl-5) * Math.sin( toRad(ang));
+            var line_attrs = { id:'id_base'+i, 'x1':x1, 'y1':y1, 'x2':x2, 'y2':y2, 'stroke':'#222', 'stroke-width':1};
+            drawSVGLine( 'pomodoro_face', 'line', line_attrs);   
         }
     }
 
     function displayGradationText(){
         // display the gradation text
         $('#pomodoro_face text').remove();
+        $('#pomodoro_face line').remove();
         // main centred text show minutes left for current interval
         var txt = makeSVGText( 'pomodoro_face', 'text', { id:'minutes_text', x:'100', y:'100', fill:'darkorange',
                                             'font-size':'25', 'font-weight':'bold'}, "24");
