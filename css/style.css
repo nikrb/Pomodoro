@@ -30,11 +30,9 @@ a {
 }
 
 #break_minutes {
-  width:2em;
   margin:1em auto;
 }
 #interval_minutes {
-  width:2em;
   margin:1em auto; 
 }
 
@@ -52,4 +50,20 @@ a {
 #error_message_text {
   color:red;
   margin: auto 1em;
+}
+
+.input-well {
+  margin:1em auto;
+  padding:0 2em;
+  display: inline-block;
+  background-color: deepskyblue;
+  box-shadow: 0 0 2px white;
+  border-radius: 3em;
+}
+.text-input {
+  width:3em;
+  background-color: lightblue;
+  border: 1px solid lightgray;
+  border-radius: 1em;
+  box-shadow: 0 0 4px white;
 }
