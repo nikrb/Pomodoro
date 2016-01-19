@@ -14,13 +14,14 @@ body {
     background: linear-gradient( deepskyblue, dodgerblue);
 }
 
-.pomodoro-box {
-  border: 3px solid black;
-}
-
 .panel-default {
   margin: 10px auto;
   width:60%;
   max-width:400px;
   border-color:gray;
+}
+
+
+#pomodoro-box {
+  border: 3px solid black;
 }

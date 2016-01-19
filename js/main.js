@@ -15,6 +15,24 @@ $(document).ready( function(){
     function toRad( a){
         return a*(Math.PI/180);
     }
+
+    function makeSVGText( append_to, tag, attrs, text) {
+        var el= document.createElementNS('http://www.w3.org/2000/svg', tag);
+        for (var k in attrs)
+            el.setAttribute(k, attrs[k]);
+        var tn = document.createTextNode( text);
+        el.appendChild( tn);
+        document.getElementById( append_to).appendChild( el);
+        return el;
+    }
+    function formatSVGText( id, txt){
+        var tbox = txt.getBBox();
+        var ty = Math.floor( tbox.height/2);
+        var tx = Math.floor( tbox.width/2);
+        var tpos = { x:100-tx, y:100+(ty/2)};
+        console.log( "new text position:", tpos, tbox);
+        $( '#'+id).attr( tpos);
+    }
     function drawFace( id, cx, cy, radius, angle){
         console.log( "@drawFace args:", arguments);
         var pathstring = "100,100 ";
@@ -30,7 +48,10 @@ $(document).ready( function(){
         $('#'+id+">polyline").attr( "points", pathstring);
         // $('#pathGhost').attr( "points", pathstring);
     }
-    // ha! can't have interval face (if), so use period face (pf)
+    function drawGradations( ){
+
+    }
+    // ha! interval face (if) is a keyword, so use period face (pf)
     var pf = $('#interval_face');
     drawFace( 'interval_clip_path', parseFloat( pf.attr( "cx")), parseFloat( pf.attr( 'cy')),
                                     parseFloat( pf.attr( 'r'))+40, 200);
@@ -40,6 +61,11 @@ $(document).ready( function(){
     var sf = $( '#seconds_face');
     drawFace( 'seconds_clip_path', parseFloat( sf.attr( "cx")), parseFloat( sf.attr( "cy")),
                                     parseFloat( sf.attr( "r"))+20, 180);
+
+$('#pomodoro_face text').remove();
+var txt = makeSVGText( 'pomodoro_face', 'text', { id:'minutes_text', x:'100', y:'100', fill:'darkorange',
+                                    'font-size':'25', 'font-weight':'bold'}, "24");
+formatSVGText( 'minutes_text', txt);
 
     $('.btn').click( function( e){
     });
