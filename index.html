@@ -10,7 +10,78 @@
   <body>
 
     <div class='text-center'>
-      <h1 class="text-primary">Main Title</h1>
+      <h1 class="text-primary">Pomodoro</h1>
+      <h2>... now with added SVG!</h2>
+    </div>
+    <!-- error message panel -->
+    <div class='error_message_panel collapse'>
+      <div class='panel panel-default'>
+        <div class='panel-body'>
+          <div class='row'>
+            <span id='error_message_text'>Error Text</span>
+            <a id='error_panel_close' class='close btn-circle' href='#'>&times;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='container settings'>
+      <div class='row text-center'>
+        <!-- break settings -->
+        <div class='col-lg-4 col-md-4 col-xs-4'>
+          <div class='panel panel-default blue-gradient'>
+            <div class='panel-heading'>
+              Breaks
+            </div>
+            <div class='panel-body'>
+              <div class='row text-center'>
+                <div>
+                  <button class='btn btn-primary'>short</button>
+                  <button class='btn btn-primary'>long</button>
+                </div>
+                <div>
+                  <a href='#'>-</a>
+                  <input type='text' id='break_minutes' value=5 />
+                  <a href='#'>+</a>
+                  mins
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- interval setting -->
+        <div class='col-lg-4 col-md-4 col-xs-4 text-center'>
+          <div class='panel panel-default'>
+            <div class='panel-heading'>
+              Interval
+            </div>
+            <div class='panel-body'>
+              <div>
+                <button class='btn btn-primary'>standard</button>
+              </div>
+              <div>
+                <a href='#'>-</a>
+                <input type='text' id='interval_minutes' value=25 />
+                <a href='#'>+</a>
+                 mins
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- timer control -->
+        <div class='col-lg-4 col-md-4 col-xs-4 text-center'>
+          <div class='panel panel-default'>
+            <div class='panel-heading'>
+              Control
+            </div>
+            <div class='panel-body'>
+              <button class='btn btn-primary'>Start</button>
+              <button class='btn btn-primary'>Pause</button>
+              <button class='btn btn-primary'>Reset</button>
+            </div>
+          </div>
+        </div>
     </div>
     <div class='text-center'>
       <svg id="pomodoro_face" viewBox="0 0 200 200" width="400" height="400">

@@ -9,15 +9,47 @@ body {
     background: blue; /* Old browsers */
     background: linear-gradient( lightblue, deepskyblue);
 }
+
+a {
+  margin: auto .2em;
+  outline: none !important;
+  text-decoration: none !important;
+}
+
+.btn {
+  outline : none !important;
+}
+
 .blue-gradient {
     background: blue; /* Old browsers */
     background: linear-gradient( deepskyblue, dodgerblue);
 }
 
-.panel-default {
-  margin: 10px auto;
-  width:60%;
-  max-width:400px;
-  border-color:gray;
+.settings {
+  margin: 1em auto;
 }
 
+#break_minutes {
+  width:2em;
+  margin:1em auto;
+}
+#interval_minutes {
+  width:2em;
+  margin:1em auto; 
+}
+
+.panel-default {
+  margin: 10px auto;
+    background: blue; /* Old browsers */
+    background: linear-gradient( deepskyblue, dodgerblue);
+}
+
+.panel-heading {
+    background: blue; /* Old browsers */
+    background: linear-gradient( deepskyblue, dodgerblue);
+}
+
+#error_message_text {
+  color:red;
+  margin: auto 1em;
+}

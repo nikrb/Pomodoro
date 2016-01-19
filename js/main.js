@@ -12,7 +12,59 @@
     
 */
 $(document).ready( function(){
-    $('.btn').click( function( e){
+    $('input').blur( function(e){
+        try{
+            var cval = Integer.parseInt( $(this).val());
+            if( cval < 5 || cval > 60) throw new Error( "out of range");
+        } catch( ex){
+            e.stopImmediatePropagation();
+            console.log( "Exception:", ex.message);
+            $('.error_message_panel').removeClass( 'collapse');
+            $('#error_message_text').html( "Minutes can only be a whole number in the range 5 to 60.");
+            $('#error_panel_close').click( function(evt){
+                $('.error_message_panel').addClass( 'collapse');
+            });
+            if( $(this).attr( 'id') === 'interval_minutes'){
+                $(this).val( 25);
+            } else {
+                $(this).val( 5);
+            }
+        }
+    });
+    $('a').click( function( e){
+        var ip_ele = $(this).siblings('input');
+        var cval = parseInt( ip_ele.val());
+        switch( e.target.text){
+            case '+':
+                ip_ele.val( cval+1);
+                break;
+            case '-':
+                ip_ele.val( cval-1);
+                break;
+        }
+    });
+    $( '.btn').click( function( e){
+        switch( $(this).text()){
+            case 'short':
+                $('#break_minutes').val( 5);
+                break;
+            case 'long':
+                $('#break_minutes').val( 10);
+                break;
+            case 'standard':
+                $('#interval_minutes').val( 25);
+                break;
+            case 'Reset':
+                break;
+            case 'Start':
+                break;
+            case 'Stop':
+                break;
+            case 'Pause':
+                break;
+            case 'Continue':
+                break;
+        }
     });
 
     function toRad( a){
@@ -116,5 +168,5 @@ $(document).ready( function(){
 
     displayGradationText();
 
-    
+
 });
