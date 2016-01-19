@@ -12,45 +12,45 @@
     <div class='text-center'>
       <h1 class="text-primary">Main Title</h1>
     </div>
-    <div class='row text-center'>
-      <div id='pomodoro-box' class=' col-xs-4'>
-        <svg id="pomodoro_face" viewBox="00 0 200 200" width="400" height="400">
-          <defs>
-            <clipPath id="seconds_clip_path">
-              <polyline points="100,100 100,50"/>
-            </clipPath>
-            <clipPath id="minutes_clip_path">
-              <polyline points="100,100 100,50"/>
-            </clipPath>
-            <mask id="minutes_hole">
-              <circle cx="100" cy="100" r="50" fill="white" />
-              <circle cx="100" cy="100" r="30" fill="black" />
-            </mask>
-            <clipPath id="interval_clip_path">
-              <polyline points="100,100 100,50"/>
-            </clipPath>
-            <mask id="interval_hole">
-              <circle cx="100" cy="100" r="70" fill="white" />
-              <circle cx="100" cy="100" r="50" fill="black" />
-            </mask>
-          </defs>
+    <div class='text-center'>
+      <svg id="pomodoro_face" viewBox="0 0 200 200" width="400" height="400">
+        <defs>
+          <clipPath id="seconds_clip_path">
+            <polyline points="100,100 100,50"/>
+          </clipPath>
+          <clipPath id="minutes_clip_path">
+            <polyline points="100,100 100,50"/>
+          </clipPath>
+          <mask id="minutes_hole">
+            <circle cx="100" cy="100" r="50" fill="white" />
+            <circle cx="100" cy="100" r="30" fill="black" />
+          </mask>
+          <clipPath id="interval_clip_path">
+            <polyline points="100,100 100,50"/>
+          </clipPath>
+          <mask id="interval_hole">
+            <circle cx="100" cy="100" r="70" fill="white" />
+            <circle cx="100" cy="100" r="50" fill="black" />
+          </mask>
+        </defs>
 
-          <circle id="interval_face" cx="100" cy="100" r="70" fill="yellow"
-                  mask="url(#interval_hole)" clip-path="url(#interval_clip_path)" />
-          <circle cx='100' cy='100' r='70' stroke='black' fill='none'/>
+        <circle id="interval_face" cx="100" cy="100" r="70" fill="yellow"
+                mask="url(#interval_hole)" clip-path="url(#interval_clip_path)" />
+        <circle cx='100' cy='100' r='70' stroke='black' fill='none'/>
 
-          <circle id="minutes_face" cx="100" cy="100" r="50" fill="red" 
-                  mask="url(#minutes_hole)" clip-path="url(#minutes_clip_path)"/>
-          <circle cx='100' cy='100' r='50' stroke='black' fill='none'/>
+        <circle id="minutes_face" cx="100" cy="100" r="50" fill="red" 
+                mask="url(#minutes_hole)" clip-path="url(#minutes_clip_path)"/>
+        <circle cx='100' cy='100' r='50' stroke='black' fill='none'/>
 
-          <circle id="seconds_face" cx="100" cy="100" r="30" fill="blue" clip-path="url(#seconds_clip_path)" />
-          <circle cx='100' cy='100' r='30' stroke='black' fill='none'/>
-          <!-- check outline >
-          <polyline id='pathGhost' points="100,100 100,50"
-                    style="fill:none;stroke:red;stroke-width:3"/-->
+        <circle id="seconds_face" cx="100" cy="100" r="30" fill="blue" clip-path="url(#seconds_clip_path)" />
+        <circle cx='100' cy='100' r='30' stroke='black' fill='none'/>
+        <!-- check outline >
+        <polyline id='pathGhost' points="100,100 100,50"
+                  style="fill:none;stroke:red;stroke-width:3"/-->
 
-        </svg>
-      </div>
+      </svg>
+    </div>
+    <div class='row'>
       <div class='col-xs-8'>
         <h1>Instructions</h1>
       </div>
