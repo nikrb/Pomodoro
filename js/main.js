@@ -93,9 +93,9 @@ $(document).ready( function(){
                 break;
             case 'Pause':
                 runTimer( false);
-                $(this).text( 'Continue');
+                $(this).text( 'Resume');
                 break;
-            case 'Continue':
+            case 'Resume':
                 runTimer( true);
                 $(this).html( 'Pause');
                 break;
