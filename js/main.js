@@ -64,6 +64,14 @@ $(document).ready( function(){
                 break;
             case 'Continue':
                 break;
+            case 'Help':
+                var face = document.getElementById( 'help_overlay');
+                console.log( "help viz:", face.style.display);
+                if( face.style.display === 'none')
+                    face.style.display = 'block';
+                else
+                    face.style.display = 'none';
+                break;
         }
     });
 
@@ -184,6 +192,4 @@ $(document).ready( function(){
                                     parseFloat( sf.attr( "r"))+20, 180);
 
     displayGradationText();
-
-
 });
