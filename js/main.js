@@ -12,18 +12,37 @@ set countdown timer time
  */
 
 $(document).ready( function(){
+    var interval_hand = $('#interval_face');
+    var minute_hand = $('#minutes_face');
+    var second_hand = $( '#seconds_face');
+    var centre_x = parseInt( second_hand.attr( 'cx'));
+    var centre_y = parseInt( second_hand.attr( 'cy'));
+    var radius = parseInt( second_hand.attr( 'r'));
+    var work_interval = true;
+    var seconds_max = 60;
+    var seconds = seconds_max;
+    var minutes = 25;
+    var minutes_max = 25;
+    var minutes_bg_colour = 'red';
+    var intervals = 4;
+    // timer id
+    var interval_id = 0;
+
+    // qjuery init
+    $('#error_panel_close').click( function(evt){
+        $('.error_message_panel').addClass( 'collapse');
+    });
     $('input').blur( function(e){
         try{
-            var cval = Integer.parseInt( $(this).val());
-            if( cval < 5 || cval > 60) throw new Error( "out of range");
+            var r = $(this).val().match( /^[5-9]$|^[1-5][0-9]$|^60$/ );
+            console.log( r);
+            if( r === null) throw new Error( "not a single number in range");
+            // if( cval < 5 || cval > 60) throw new Error( "out of range");
         } catch( ex){
             e.stopImmediatePropagation();
             console.log( "Exception:", ex.message);
             $('.error_message_panel').removeClass( 'collapse');
             $('#error_message_text').html( "Minutes can only be a whole number in the range 5 to 60.");
-            $('#error_panel_close').click( function(evt){
-                $('.error_message_panel').addClass( 'collapse');
-            });
             if( $(this).attr( 'id') === 'interval_minutes'){
                 $(this).val( 25);
             } else {
@@ -55,14 +74,31 @@ $(document).ready( function(){
                 $('#interval_minutes').val( 25);
                 break;
             case 'Reset':
+                runTimer( false);
+                setBreakTime( 5);
+                refreshFace();
                 break;
             case 'Start':
+                $(this).text( 'Stop');
+                work_interval = true;
+                seconds = seconds_max;
+                minutes_max = parseInt( $('#interval_minutes').val());
+                minutes = minutes_max;
+                intervals = 4;
+                refreshFace();
+                runTimer( true);
                 break;
             case 'Stop':
+                runTimer( false);
+                $(this).text( 'Start');
                 break;
             case 'Pause':
+                runTimer( false);
+                $(this).text( 'Continue');
                 break;
             case 'Continue':
+                runTimer( true);
+                $(this).html( 'Pause');
                 break;
             case 'Help':
                 var face = document.getElementById( 'help_overlay');
@@ -72,8 +108,60 @@ $(document).ready( function(){
                 else
                     face.style.display = 'none';
                 break;
+            case 'Test':
+                if( seconds_max === 60){
+                    seconds_max = 3;
+                } else {
+                    seconds_max = 60;
+                }
+                seconds = seconds_max;
+                break;
         }
     });
+
+    function runTimer( run){
+        if( interval_id) clearInterval( interval_id);
+        interval_id = 0;
+        if( run) interval_id = setInterval( tic, 1000);
+    }
+    function tic(){
+        if( --seconds === 0){
+            seconds = seconds_max;
+            if( --minutes === 0){
+                playDing();
+                if( work_interval){
+                    work_interval = false;
+                    minutes_bg_colour = 'green';
+                    minutes_max = $('#break_minutes').val();
+                    setBreakTime( minutes_max);
+                } else {
+                    playDing();
+                    work_interval = true;
+                    minutes_bg_colour = 'red';
+                    minutes_max = $('#interval_minutes').val();
+                    intervals--;
+                    if( intervals === 1){
+                        // get ready for long break
+                        setBreakTime( 10);
+                    } else if( intervals === 0){
+                        playDing(2);
+                        setBreakTime( 5);
+                        intervals = 4;
+                    }
+                    refreshIntervalHand();
+                }
+                minutes = minutes_max;
+            }
+            refreshMinuteHand();
+        }
+        refreshSecondHand();
+    }
+    function setBreakTime( mins){
+        $('#break_minutes').val( mins);
+    }
+    function playDing(){
+
+    }
 
     function toRad( a){
         return a*(Math.PI/180);
@@ -130,7 +218,8 @@ $(document).ready( function(){
 
     /**
         drawGradations
-        display pomodoro gradation (svg) text 
+        display pomodoro gradation (svg) text
+        haven't bothered with gradations on seconds
         params:
         total:int       number of gradations, e.g. (secs:60, mins:25, intervals:4)
         mf:$.element    one of the doughnut faces, [interval_face, minutes_face, seconds_face]
@@ -174,22 +263,28 @@ $(document).ready( function(){
         formatSVGText( 'minutes_text', txt);
 
         // the the doughnut grads for minutes and interval
-        drawGradations( 25, mf, 'minsgrad');
-        drawGradations( 4, pf, 'intervalgrad');
+        drawGradations( minutes_max, minute_hand, 'minsgrad');
+        drawGradations( 4, interval_hand, 'intervalgrad');
     }
 
-    // ha! interval face (if) is a keyword, so use period face (pf)
-    var pf = $('#interval_face');
-    drawFace( 'interval_clip_path', parseFloat( pf.attr( "cx")), parseFloat( pf.attr( 'cy')),
-                                    parseFloat( pf.attr( 'r'))+40, 200);
-    var mf = $('#minutes_face');
-    drawFace( 'minutes_clip_path', parseFloat( mf.attr( 'cx')), parseFloat( mf.attr( 'cy')),
-                                    parseFloat( mf.attr( 'r'))+30, 220);
-    // switch colour mf.attr( 'fill', 'green');
-
-    var sf = $( '#seconds_face');
-    drawFace( 'seconds_clip_path', parseFloat( sf.attr( "cx")), parseFloat( sf.attr( "cy")),
-                                    parseFloat( sf.attr( "r"))+20, 180);
-
-    displayGradationText();
+    function refreshIntervalHand(){
+        var angle = intervals * 360/4 - 90;
+        drawFace( 'interval_clip_path', centre_x, centre_y, radius+50, angle);
+    }
+    function refreshMinuteHand(){
+        var angle = minutes * 360 / minutes_max -90;
+        drawFace( 'minutes_clip_path', centre_x, centre_y, radius+30, angle);
+        minute_hand.attr( 'fill', minutes_bg_colour);
+    }
+    function refreshSecondHand(){
+        var angle = seconds * 360 / 60 -90;
+        drawFace( 'seconds_clip_path', centre_x, centre_y, radius+20, angle);
+    }
+    function refreshFace(){
+        displayGradationText();
+        refreshSecondHand();
+        refreshMinuteHand();
+        refreshIntervalHand();
+    }
+    refreshFace();
 });
