@@ -21,8 +21,8 @@ a {
 }
 
 .blue-gradient {
-    background: blue; /* Old browsers */
-    background: linear-gradient( deepskyblue, dodgerblue);
+  background: blue; /* Old browsers */
+  background: linear-gradient( deepskyblue, dodgerblue);
 }
 
 .settings {
@@ -36,15 +36,20 @@ a {
   margin:1em auto; 
 }
 
+.panel {
+  border-radius: 25px;
+}
 .panel-default {
   margin: 10px auto;
-    background: blue; /* Old browsers */
-    background: linear-gradient( deepskyblue, dodgerblue);
+  background: blue; /* Old browsers */
+  background: linear-gradient( deepskyblue, dodgerblue);
 }
 
 .panel-heading {
-    background: blue; /* Old browsers */
-    background: linear-gradient( deepskyblue, dodgerblue);
+  background: blue; /* Old browsers */
+  background: linear-gradient( deepskyblue, dodgerblue);
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 }
 
 #error_message_text {
