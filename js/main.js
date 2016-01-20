@@ -28,7 +28,29 @@ $(document).ready( function(){
     // timer id
     var interval_id = 0;
 
-    // qjuery init
+    // jquery init
+
+    $(document).on( 'keypress', function( e){
+        switch( e.which){
+            case 32:
+                e.preventDefault();
+                if( interval_id === 0){
+                    resume();
+                } else {
+                    pause();
+                }
+                break;
+            case 115:
+                e.preventDefault();
+                if( interval_id === 0){
+                    start();
+                } else {
+                    stop();
+                }
+                break;
+        }
+    });
+
     $('#error_panel_close').click( function(evt){
         $('.error_message_panel').addClass( 'collapse');
     });
@@ -78,26 +100,16 @@ $(document).ready( function(){
                 refreshFace();
                 break;
             case 'Start':
-                $(this).text( 'Stop');
-                work_interval = true;
-                seconds = seconds_max;
-                minutes_max = parseInt( $('#interval_minutes').val());
-                minutes = minutes_max;
-                intervals = 4;
-                refreshFace();
-                runTimer( true);
+                start();
                 break;
             case 'Stop':
-                runTimer( false);
-                $(this).text( 'Start');
+                stop();
                 break;
             case 'Pause':
-                runTimer( false);
-                $(this).text( 'Resume');
+                pause();
                 break;
             case 'Resume':
-                runTimer( true);
-                $(this).html( 'Pause');
+                resume();
                 break;
             case 'Help':
                 var face = document.getElementById( 'help_overlay');
@@ -118,7 +130,28 @@ $(document).ready( function(){
                 break;
         }
     });
-
+    function start(){
+        $('#start_btn').text( 'Stop');
+        work_interval = true;
+        seconds = seconds_max;
+        minutes_max = parseInt( $('#interval_minutes').val());
+        minutes = minutes_max;
+        intervals = 4;
+        refreshFace();
+        runTimer( true);
+    }
+    function stop( $ele){
+        runTimer( false);
+        $('#start_btn').text( 'Start');
+    }
+    function pause(){
+        runTimer( false);
+        $('#pause_btn').text( 'Resume');
+    }
+    function resume(){
+        runTimer( true);
+        $('#pause_btn').text( 'Pause');
+    }
     function runTimer( run){
         if( interval_id) clearInterval( interval_id);
         interval_id = 0;
