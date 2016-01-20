@@ -111,10 +111,11 @@ $(document).ready( function(){
             case 'Test':
                 if( seconds_max === 60){
                     seconds_max = 3;
+                    seconds = seconds_max;
                 } else {
+                    // don't set actual seconds here, let it finish and then wrap to 60
                     seconds_max = 60;
                 }
-                seconds = seconds_max;
                 break;
         }
     });
