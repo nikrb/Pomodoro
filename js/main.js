@@ -35,7 +35,6 @@ $(document).ready( function(){
     $('input').blur( function(e){
         try{
             var r = $(this).val().match( /^[5-9]$|^[1-5][0-9]$|^60$/ );
-            console.log( r);
             if( r === null) throw new Error( "not a single number in range");
             // if( cval < 5 || cval > 60) throw new Error( "out of range");
         } catch( ex){
@@ -133,13 +132,12 @@ $(document).ready( function(){
                 if( work_interval){
                     work_interval = false;
                     minutes_bg_colour = 'green';
-                    minutes_max = $('#break_minutes').val();
-                    setBreakTime( minutes_max);
+                    minutes_max = parseInt( $('#break_minutes').val());
                 } else {
                     playDing();
                     work_interval = true;
                     minutes_bg_colour = 'red';
-                    minutes_max = $('#interval_minutes').val();
+                    minutes_max = parseInt( $('#interval_minutes').val());
                     intervals--;
                     if( intervals === 1){
                         // get ready for long break
@@ -151,7 +149,9 @@ $(document).ready( function(){
                     }
                     refreshIntervalHand();
                 }
+                console.log( "new minutes_max:", minutes_max);
                 minutes = minutes_max;
+                displayGradationText();
             }
             refreshMinuteHand();
         }
@@ -183,7 +183,6 @@ $(document).ready( function(){
         var ty = Math.floor( tbox.height/2);
         var tx = Math.floor( tbox.width/2);
         var tpos = { x:100-tx, y:100+(ty/2)};
-        console.log( "new text position:", tpos, tbox);
         $( '#'+id).attr( tpos);
     }
     function drawSVGLine( append_to, tag, attrs) {
@@ -202,7 +201,6 @@ $(document).ready( function(){
         angle:int   how far around doughnut has progressed
     **/
     function drawFace( id, cx, cy, radius, angle){
-        console.log( "@drawFace args:", arguments);
         var pathstring = "100,100 ";
         var x,y;
         for( var i = angle; i > -90 ; i -= 45){
@@ -253,16 +251,12 @@ $(document).ready( function(){
             drawSVGLine( 'pomodoro_face', 'line', line_attrs);   
         }
     }
-
+    // FIXME we really only want to refresh minutes grads after initial draw.
+    //          we'll need to put the minute stuff in an svg group on it's own me thinx
     function displayGradationText(){
         // display the gradation text
         $('#pomodoro_face text').remove();
         $('#pomodoro_face line').remove();
-        // main centred text show minutes left for current interval
-        var txt = makeSVGText( 'pomodoro_face', 'text', { id:'minutes_text', x:'100', y:'100', fill:'darkorange',
-                                            'font-size':'25', 'font-weight':'bold'}, "24");
-        formatSVGText( 'minutes_text', txt);
-
         // the the doughnut grads for minutes and interval
         drawGradations( minutes_max, minute_hand, 'minsgrad');
         drawGradations( 4, interval_hand, 'intervalgrad');
@@ -273,9 +267,15 @@ $(document).ready( function(){
         drawFace( 'interval_clip_path', centre_x, centre_y, radius+50, angle);
     }
     function refreshMinuteHand(){
+        console.log( "@refreshMinuteHand minutes:", minutes);
         var angle = minutes * 360 / minutes_max -90;
         drawFace( 'minutes_clip_path', centre_x, centre_y, radius+30, angle);
         minute_hand.attr( 'fill', minutes_bg_colour);
+        $('#minutes_text').remove();
+        // main centred text show minutes left for current interval
+        var txt = makeSVGText( 'pomodoro_face', 'text', { id:'minutes_text', x:'100', y:'100', fill:'darkorange',
+                                            'font-size':'25', 'font-weight':'bold'}, minutes);
+        formatSVGText( 'minutes_text', txt);
     }
     function refreshSecondHand(){
         var angle = seconds * 360 / 60 -90;
