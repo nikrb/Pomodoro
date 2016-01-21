@@ -382,6 +382,6 @@ $(document).ready( function(){
         refreshMinuteHand();
         refreshIntervalHand();
     }
-    setupTest();
+    // setupTest();
     refreshFace();
 });
