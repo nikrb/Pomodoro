@@ -27,9 +27,12 @@ $(document).ready( function(){
     var intervals = 4;
     // timer id
     var interval_id = 0;
+    // need from and to points for animate, so keep a hold of the last. Start with the placeholder
+    var last_points = { 'minutes' : "100,100 100,0 200,100 100,200 0,100 100,0 100,100",
+                        'intervals':"100,100 100,0 200,100 100,200 0,100 100,0 100,100"
+                    };
 
     // jquery init
-
     $(document).on( 'keypress', function( e){
         switch( e.which){
             case 32:
@@ -224,28 +227,64 @@ $(document).ready( function(){
             el.setAttribute(k, attrs[k]);
         document.getElementById( append_to).appendChild( el);
     }
+
+    function animateSVG( append_to, attrs) {
+        var old = document.getElementById( attrs.id);
+        if( old) old.remove();
+        var el= document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+        for (var k in attrs)
+            el.setAttribute(k, attrs[k]);
+        document.getElementById( append_to).appendChild( el);
+        el.beginElement();
+    }
     /**
         drawFace
         draw doughnut progress
-        id:ele      element doughnut to draw
+        to animate clipath points must have the same number of pairs
+        using 8 pointed poly, back to the start (top point of poly) is another point, 
+        centre start and finish is another 2. So we have 11 points in total.
+        id_base:ele element base name of doughnut to draw
         cx:int      centre x
         cy:int      centre y
         radius:int  doughnut outer radius
         angle:int   how far around doughnut has progressed
     **/
-    function drawFace( id, cx, cy, radius, angle){
-        var pathstring = "100,100 ";
+    function drawFace( id_base, cx, cy, radius, angle, anim){
+        var pathstring = "100,100";
         var x,y;
-        for( var i = angle; i > -90 ; i -= 45){
-            x = cx + radius * Math.cos( toRad(i));
-            y = cy + radius* Math.sin( toRad(i));
+        var delta = angle/4;
+        var ang = 0;
+        console.log( "@drawFace ele[%s] angle[%d] delta[%d]", id_base, angle, delta);
+        // for( var i = -90; i<= angle; i += delta){
+        for( var i = 0; i<5; i++){
+            ang = i*delta -90;
+            console.log( "@drawFace i[%d] ang[%d]", i, ang);
+            x = cx + radius * Math.cos( toRad(ang));
+            y = cy + radius * Math.sin( toRad(ang));
             pathstring += " "+x+","+y;
         }
-        x = cx + radius * Math.cos( toRad( -90));
-        y = cy + radius* Math.sin( toRad( -90));
-        pathstring += " "+x+","+y+" 100,100";
-        $('#'+id+">polyline").attr( "points", pathstring);
-        // $('#pathGhost').attr( "points", pathstring);
+        pathstring += " 100,100";
+        console.log( "@drawFace path:", pathstring);
+        if( anim){
+            var attrs = {
+                id              : id_base+"_polyline_anim",
+                dur             : "1s",
+                from            : last_points['id_base'],
+                to              : pathstring,
+                attributeName   : "points",
+                fill            : "freeze",
+                calcMode        : "spline",
+                keySplines      : "0.42 0 0.58 1"
+            };
+            console.log( "mins attrs:", attrs);
+            animateSVG( id_base+"_polyline", attrs);
+            last_points['id_base'] = pathstring.slice();
+            // check 
+            $('#pathGhost').attr( "points", last_points['id_base']);
+        } else {
+            $('#'+id_base+">polyline").attr( "points", pathstring);
+            // $('#pathGhost').attr( "points", pathstring);
+        }
     }
 
     /**
@@ -281,7 +320,7 @@ $(document).ready( function(){
             var x2 = cx + (mfrl-5) * Math.cos( toRad(ang));
             var y2 = cy + (mfrl-5) * Math.sin( toRad(ang));
             var line_attrs = { id:'id_base'+i, 'x1':x1, 'y1':y1, 'x2':x2, 'y2':y2, 'stroke':'#222', 'stroke-width':1};
-            drawSVGLine( 'pomodoro_face', 'line', line_attrs);   
+            drawSVGLine( 'pomodoro_face', 'line', line_attrs);
         }
     }
     // FIXME we really only want to refresh minutes grads after initial draw.
@@ -296,14 +335,14 @@ $(document).ready( function(){
     }
 
     function refreshIntervalHand(){
-        var angle = intervals * 360/4 - 90;
-        drawFace( 'interval_clip_path', centre_x, centre_y, radius+50, angle);
+        var angle = intervals * 360/4;
+        drawFace( 'interval_clip_path', centre_x, centre_y, 100, angle, false);
     }
     function refreshMinuteHand(){
         console.log( "@refreshMinuteHand minutes:", minutes);
-        var angle = minutes * 360 / minutes_max -90;
-        drawFace( 'minutes_clip_path', centre_x, centre_y, radius+30, angle);
+        var angle = minutes * 360 / minutes_max;
         minute_hand.attr( 'fill', minutes_bg_colour);
+        drawFace( 'minutes', centre_x, centre_y, 100, angle, true);
         $('#minutes_text').remove();
         // main centred text show minutes left for current interval
         var txt = makeSVGText( 'pomodoro_face', 'text', { id:'minutes_text', x:'100', y:'100', fill:'darkorange',
@@ -311,8 +350,8 @@ $(document).ready( function(){
         formatSVGText( 'minutes_text', txt);
     }
     function refreshSecondHand(){
-        var angle = seconds * 360 / 60 -90;
-        drawFace( 'seconds_clip_path', centre_x, centre_y, radius+20, angle);
+        var angle = seconds * 360 / 60;
+        drawFace( 'seconds_clip_path', centre_x, centre_y, 100, angle, false);
     }
     function refreshFace(){
         displayGradationText();
