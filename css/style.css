@@ -29,9 +29,6 @@ a {
   margin: 1em auto;
 }
 
-#break_minutes {
-  margin:1em auto;
-}
 #interval_minutes {
   margin:1em auto; 
 }
@@ -59,7 +56,7 @@ a {
 
 .input-well {
   margin:1em auto;
-  padding:0 2em;
+  padding:0 0.5em;
   display: inline-block;
   background-color: deepskyblue;
   box-shadow: 0 0 2px white;
@@ -67,6 +64,7 @@ a {
 }
 .text-input {
   width:3em;
+  margin: 0.5em auto !important;
   background-color: lightblue;
   border: 1px solid lightgray;
   border-radius: 1em;

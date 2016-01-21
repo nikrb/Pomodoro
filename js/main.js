@@ -28,7 +28,8 @@ $(document).ready( function(){
     // timer id
     var interval_id = 0;
     // need from and to points for animate, so keep a hold of the last. Start with the placeholder
-    var last_points = { 'minutes' : "100,100 100,0 200,100 100,200 0,100 100,0 100,100",
+    var last_points = initial_points = {
+                        'minutes' : "100,100 100,0 200,100 100,200 0,100 100,0 100,100",
                         'intervals':"100,100 100,0 200,100 100,200 0,100 100,0 100,100"
                     };
 
@@ -59,7 +60,7 @@ $(document).ready( function(){
     });
     $('input').blur( function(e){
         try{
-            var r = $(this).val().match( /^[5-9]$|^[1-5][0-9]$|^60$/ );
+            var r = $(this).val().match( /^[3-9]$|^[1-5][0-9]$|^60$/ );
             if( r === null) throw new Error( "not a single number in range");
             // if( cval < 5 || cval > 60) throw new Error( "out of range");
         } catch( ex){
@@ -89,17 +90,17 @@ $(document).ready( function(){
     $( '.btn').click( function( e){
         switch( $(this).text()){
             case 'short':
-                $('#break_minutes').val( 5);
+                $('#short_break_minutes').val( 5);
                 break;
             case 'long':
-                $('#break_minutes').val( 10);
+                $('#long_break_minutes').val( 10);
                 break;
             case 'standard':
                 $('#interval_minutes').val( 25);
                 break;
             case 'Reset':
                 runTimer( false);
-                setBreakTime( 5);
+                setDefaultBreakTimes();
                 refreshFace();
                 break;
             case 'Start':
@@ -122,16 +123,26 @@ $(document).ready( function(){
                     face.style.display = 'none';
                 break;
             case 'Test':
-                if( seconds_max === 60){
-                    seconds_max = 3;
-                    seconds = seconds_max;
-                } else {
-                    // don't set actual seconds here, let it finish and then wrap to 60
-                    seconds_max = 60;
-                }
+                setupTest();
                 break;
         }
     });
+    function setupTest(){
+        if( seconds_max === 60){
+            minutes_max = 3;
+            $('#interval_minutes').val( 3);
+            minutes = minutes_max;
+            $('#short_break_minutes').val( 3);
+            $('#long_break_minutes').val( 3);
+            seconds_max = 3;
+            seconds = seconds_max;
+            refreshFace();
+        } else {
+            // don't set actual seconds here, let it finish and then wrap to 60
+            seconds_max = 60;
+            minutes_max = 5;
+        }
+    }
     function start(){
         $('#start_btn').text( 'Stop');
         work_interval = true;
@@ -167,19 +178,20 @@ $(document).ready( function(){
                 if( work_interval){
                     work_interval = false;
                     minutes_bg_colour = 'green';
-                    minutes_max = parseInt( $('#break_minutes').val());
+                    // last interval has a long break
+                    if( intervals === 1){
+                        minutes_max = parseInt( $('#long_break_minutes').val());
+                    } else {
+                        minutes_max = parseInt( $('#short_break_minutes').val());
+                    }
                 } else {
                     playDing();
                     work_interval = true;
                     minutes_bg_colour = 'red';
                     minutes_max = parseInt( $('#interval_minutes').val());
                     intervals--;
-                    if( intervals === 1){
-                        // get ready for long break
-                        setBreakTime( 10);
-                    } else if( intervals === 0){
+                    if( intervals === 0){
                         playDing(2);
-                        setBreakTime( 5);
                         intervals = 4;
                     }
                     refreshIntervalHand();
@@ -191,8 +203,10 @@ $(document).ready( function(){
         }
         refreshSecondHand();
     }
-    function setBreakTime( mins){
-        $('#break_minutes').val( mins);
+    function setDefaultBreakTime(){
+        $('#short_break_minutes').val( 5);
+        $('#long_break_minutes').val( 10);
+        $('#interval_minutes').val( 25);
     }
     function playDing(){
 
@@ -264,7 +278,7 @@ $(document).ready( function(){
             var attrs = {
                 id              : id_base+"_polyline_anim",
                 dur             : "1s",
-                from            : last_points['id_base'],
+                from            : last_points[id_base],
                 to              : pathstring,
                 attributeName   : "points",
                 fill            : "freeze",
@@ -272,13 +286,19 @@ $(document).ready( function(){
                 keySplines      : "0.42 0 0.58 1"
             };
             animateSVG( id_base+"_polyline", attrs);
-            last_points['id_base'] = pathstring.slice();
-            // check 
-            $('#pathGhost').attr( "points", last_points['id_base']);
+            last_points[id_base] = pathstring.slice();
         } else {
+            var old = document.getElementById( id_base+"_polyline_anim");
+            if( old){
+                old.remove();
+                last_points[id_base] = pathstring.slice();
+            }
             $('#'+id_base+">polyline").attr( "points", pathstring);
-            // $('#pathGhost').attr( "points", pathstring);
         }
+        // check 
+        // if( id_base === 'intervals'){
+        //     $('#pathGhost').attr( "points", pathstring);
+        // }
     }
 
     /**
@@ -330,12 +350,22 @@ $(document).ready( function(){
 
     function refreshIntervalHand(){
         var angle = intervals * 360/4;
-        drawFace( 'intervals', centre_x, centre_y, 100, angle, true);
+        var anim = true;
+        if( intervals === 4){
+            anim = false;
+            last_points['intervals'] = initial_points['intervals'].slice();
+        }
+        drawFace( 'intervals', centre_x, centre_y, 200, angle, anim);
     }
     function refreshMinuteHand(){
         var angle = minutes * 360 / minutes_max;
+        var anim = true;
+        if( minutes === minutes_max){
+            anim = false;
+            last_points['minutes'] = initial_points['minutes'].slice();
+        }
         minute_hand.attr( 'fill', minutes_bg_colour);
-        drawFace( 'minutes', centre_x, centre_y, 100, angle, true);
+        drawFace( 'minutes', centre_x, centre_y, 150, angle, anim);
         $('#minutes_text').remove();
         // main centred text show minutes left for current interval
         var txt = makeSVGText( 'pomodoro_face', 'text', { id:'minutes_text', x:'100', y:'100', fill:'darkorange',
@@ -344,7 +374,7 @@ $(document).ready( function(){
     }
     function refreshSecondHand(){
         var angle = seconds * 360 / 60;
-        drawFace( 'seconds_clip_path', centre_x, centre_y, 100, angle, false);
+        drawFace( 'seconds_clip_path', centre_x, centre_y, radius+50, angle, false);
     }
     function refreshFace(){
         displayGradationText();
@@ -352,5 +382,6 @@ $(document).ready( function(){
         refreshMinuteHand();
         refreshIntervalHand();
     }
+    setupTest();
     refreshFace();
 });

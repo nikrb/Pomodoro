@@ -32,19 +32,27 @@
         <div class='col-lg-4 col-md-4 col-xs-4'>
           <div class='panel panel-default blue-gradient'>
             <div class='panel-heading'>
-              Breaks
+              Breaks <i>(mins)</i>
             </div>
             <div class='panel-body'>
-              <div class='row text-center'>
+              <div class='col-xs-6'>
                 <div>
                   <button class='btn btn-primary'>short</button>
+                </div>
+                <div class='input-well'>
+                  <a href='#'>-</a>
+                  <input type='text' id='short_break_minutes' class='text-center text-input' value=5 />
+                  <a href='#'>+</a>
+                </div>
+              </div>
+              <div class='col-xs-6'>
+                <div>
                   <button class='btn btn-primary'>long</button>
                 </div>
                 <div class='input-well'>
                   <a href='#'>-</a>
-                  <input type='text' id='break_minutes' class='text-center text-input' value=5 />
+                  <input type='text' id='long_break_minutes' class='text-center text-input' value=10 />
                   <a href='#'>+</a>
-                  mins
                 </div>
               </div>
             </div>
@@ -55,7 +63,7 @@
         <div class='col-lg-4 col-md-4 col-xs-4 text-center'>
           <div class='panel panel-default'>
             <div class='panel-heading'>
-              Interval
+              Interval <i>(mins)</i>
             </div>
             <div class='panel-body'>
               <div>
@@ -65,7 +73,6 @@
                 <a href='#'>-</a>
                 <input type='text' id='interval_minutes' class='text-center text-input' value=25 />
                 <a href='#'>+</a>
-                 mins
               </div>
             </div>
           </div>
@@ -103,7 +110,8 @@
             <circle cx="100" cy="100" r="30" fill="black" />
           </mask>
           <clipPath id="intervals_clip_path">
-            <polyline id='intervals_polyline' points="100,100 100,50">
+            <polyline id='intervals_polyline' points="100,100 100,0 200,100 100,200
+                                                    0,100 100,0 100,100">
             </polyline>
           </clipPath>
           <mask id="interval_hole">
@@ -120,7 +128,7 @@
                 mask="url(#minutes_hole)" clip-path="url(#minutes_clip_path)"/>
         <circle cx='100' cy='100' r='50' stroke='black' fill='none'/>
         <!-- check outline >
-        <polyline id='pathGhost' points="100,100 100,0 196.59258262890683,74.11809548974793 150,186.60254037844385 29.28932188134526,170.71067811865476 13.397459621556138,49.999999999999986 100,100"
+        <polyline id='pathGhost' points="100,100 100,0 200,100 100,200 0,100 100,0 100,100"
                   style="fill:none;stroke:black;stroke-width:3"/-->
 
         <circle id="seconds_face" cx="100" cy="100" r="30" fill="dodgerblue" clip-path="url(#seconds_clip_path)" />
