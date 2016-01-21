@@ -16,6 +16,10 @@ a {
   text-decoration: none !important;
 }
 
+hr {
+  margin:0.5em;
+}
+
 .btn {
   outline : none !important;
 }
@@ -23,10 +27,6 @@ a {
 .blue-gradient {
   background: blue; /* Old browsers */
   background: linear-gradient( deepskyblue, dodgerblue);
-}
-
-.settings {
-  margin: 1em auto;
 }
 
 #interval_minutes {
@@ -59,7 +59,6 @@ a {
 
 .input-well {
   margin:1em auto;
-  padding:0 0.5em;
   display: inline-block;
   background-color: deepskyblue;
   box-shadow: 0 0 2px white;
