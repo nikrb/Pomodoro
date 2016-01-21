@@ -116,7 +116,6 @@ $(document).ready( function(){
                 break;
             case 'Help':
                 var face = document.getElementById( 'help_overlay');
-                console.log( "help viz:", face.style.display);
                 if( face.style.display === 'none')
                     face.style.display = 'block';
                 else
@@ -185,7 +184,6 @@ $(document).ready( function(){
                     }
                     refreshIntervalHand();
                 }
-                console.log( "new minutes_max:", minutes_max);
                 minutes = minutes_max;
                 displayGradationText();
             }
@@ -254,17 +252,14 @@ $(document).ready( function(){
         var x,y;
         var delta = angle/4;
         var ang = 0;
-        console.log( "@drawFace ele[%s] angle[%d] delta[%d]", id_base, angle, delta);
         // for( var i = -90; i<= angle; i += delta){
         for( var i = 0; i<5; i++){
             ang = i*delta -90;
-            console.log( "@drawFace i[%d] ang[%d]", i, ang);
             x = cx + radius * Math.cos( toRad(ang));
             y = cy + radius * Math.sin( toRad(ang));
             pathstring += " "+x+","+y;
         }
         pathstring += " 100,100";
-        console.log( "@drawFace path:", pathstring);
         if( anim){
             var attrs = {
                 id              : id_base+"_polyline_anim",
@@ -276,7 +271,6 @@ $(document).ready( function(){
                 calcMode        : "spline",
                 keySplines      : "0.42 0 0.58 1"
             };
-            console.log( "mins attrs:", attrs);
             animateSVG( id_base+"_polyline", attrs);
             last_points['id_base'] = pathstring.slice();
             // check 
@@ -336,10 +330,9 @@ $(document).ready( function(){
 
     function refreshIntervalHand(){
         var angle = intervals * 360/4;
-        drawFace( 'interval_clip_path', centre_x, centre_y, 100, angle, false);
+        drawFace( 'intervals', centre_x, centre_y, 100, angle, true);
     }
     function refreshMinuteHand(){
-        console.log( "@refreshMinuteHand minutes:", minutes);
         var angle = minutes * 360 / minutes_max;
         minute_hand.attr( 'fill', minutes_bg_colour);
         drawFace( 'minutes', centre_x, centre_y, 100, angle, true);
