@@ -63,12 +63,12 @@ a {
   display: inline-block;
   background-color: deepskyblue;
   box-shadow: 0 0 2px white;
-  border-radius: 3em;
+  border-radius: 1em;
 }
 .input-well a {
   background-color: lightblue;
   border: 1px solid lightgray;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 .text-input {
