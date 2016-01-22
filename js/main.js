@@ -10,6 +10,9 @@ set countdown timer time
   calc
     angle = count * 360/n -90
  */
+// sounds from soundbible.com
+var ding = new Audio('audio/glass_ping-Go445-1207030150.wav');
+var bell = new Audio('audio/Ship_Bell-Mike_Koenig-1911209136.wav');
 
 $(document).ready( function(){
     var interval_hand = $('#interval_face');
@@ -32,6 +35,9 @@ $(document).ready( function(){
                         'minutes' : "100,100 100,0 200,100 100,200 0,100 100,0 100,100",
                         'intervals':"100,100 100,0 200,100 100,200 0,100 100,0 100,100"
                     };
+    // list of sounds to be played
+    var sound_list = [];
+    var sound_playing = false;
 
     // jquery init
     $(document).on( 'keypress', function( e){
@@ -174,7 +180,7 @@ $(document).ready( function(){
         if( --seconds === 0){
             seconds = seconds_max;
             if( --minutes === 0){
-                playDing();
+                playDing(1);
                 if( work_interval){
                     work_interval = false;
                     minutes_bg_colour = 'green';
@@ -185,7 +191,7 @@ $(document).ready( function(){
                         minutes_max = parseInt( $('#short_break_minutes').val());
                     }
                 } else {
-                    playDing();
+                    playDing(1);
                     work_interval = true;
                     minutes_bg_colour = 'red';
                     minutes_max = parseInt( $('#interval_minutes').val());
@@ -208,8 +214,30 @@ $(document).ready( function(){
         $('#long_break_minutes').val( 10);
         $('#interval_minutes').val( 25);
     }
-    function playDing(){
-
+    // we have a short ding for breaks and long ding for restarting intervals from scratch
+    function playDing( length){
+        sound_list.push( length);
+        if( !sound_playing){
+            playNextSound();
+        }
+    }
+    function playNextSound(){
+        sound_playing = true;
+        console.log( "play ding:", sound_list[0]);
+        switch( sound_list[0]){
+            case 1:
+                ding.play();
+                break;
+            case 2:
+                bell.play();
+                break;
+        }
+    }
+    function playFinished( e){
+        console.log( "play finished");
+        sound_playing = false;
+        sound_list.shift();
+        if( sound_list.length) playNextSound();
     }
 
     function toRad( a){
@@ -384,4 +412,6 @@ $(document).ready( function(){
     }
     // setupTest();
     refreshFace();
+    ding.onended = playFinished;
+    bell.onended = playFinished;
 });
