@@ -38,6 +38,7 @@ $(document).ready( function(){
     // list of sounds to be played
     var sound_list = [];
     var sound_playing = false;
+    var sound_enabled = true;
 
     // jquery init
     $(document).on( 'keypress', function( e){
@@ -133,6 +134,21 @@ $(document).ready( function(){
                 break;
         }
     });
+    // there's no text in the sound button
+    $( '#sound_btn').on( 'click', function(e){
+        sound_enabled = !sound_enabled;
+        if( sound_enabled){
+            $('#sound_btn i').removeClass().addClass( 'glyphicon glyphicon-volume-up');
+        } else {
+            sound_list = [];
+            sound_playing = false;
+            $('#sound_btn i').removeClass().addClass( 'glyphicon glyphicon-volume-off');
+            ding.pause();
+            ding.currentTime = 0;
+            bell.pause();
+            bell.currentTime = 0;
+        }
+    });
     function setupTest(){
         if( seconds_max === 60){
             minutes_max = 3;
@@ -216,9 +232,11 @@ $(document).ready( function(){
     }
     // we have a short ding for breaks and long ding for restarting intervals from scratch
     function playDing( length){
-        sound_list.push( length);
-        if( !sound_playing){
-            playNextSound();
+        if( sound_enabled){
+            sound_list.push( length);
+            if( !sound_playing){
+                playNextSound();
+            }
         }
     }
     function playNextSound(){
@@ -234,10 +252,12 @@ $(document).ready( function(){
         }
     }
     function playFinished( e){
-        console.log( "play finished");
-        sound_playing = false;
-        sound_list.shift();
-        if( sound_list.length) playNextSound();
+        if( sound_enabled){
+            console.log( "play finished");
+            sound_playing = false;
+            sound_list.shift();
+            if( sound_list.length) playNextSound();
+        }
     }
 
     function toRad( a){
