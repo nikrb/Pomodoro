@@ -1,0 +1,11 @@
+{
+  "name": "simple-server",
+  "version": "0.0.0",
+  "description": "simple server to run and index.html file in this directory",
+  "main": "server.js",
+  "repository": "",
+  "author": "nhs",
+  "dependencies": {
+    "express": "~3.2.4"
+  }
+}
